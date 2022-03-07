@@ -8,6 +8,7 @@ export default function EditableBlock({ block, updateBlock, setIsNewBlock, setTo
   const [html, setHtml] = useState(block.html);
   const [tag, setTag] = useState(block.tag);
   const [htmlBackup, setHtmlBackup] = useState(block.html);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleChange = (evt) => {
     htmlRef.current = evt.target.value;
@@ -28,6 +29,7 @@ export default function EditableBlock({ block, updateBlock, setIsNewBlock, setTo
   const keyDownHandler = (evt) => {
     if (evt.keyCode === 191) {
       setHtmlBackup(html);
+      setIsMenuOpen(true);
     }
     if (!evt.shiftKey && evt.keyCode === 13) {
       evt.preventDefault();
@@ -40,14 +42,16 @@ export default function EditableBlock({ block, updateBlock, setIsNewBlock, setTo
   };
 
   return (
-    <ContentEditable
-      innerRef={editableRef}
-      html={htmlRef.current}
-      tagName={tag}
-      onChange={handleChange}
-      onBlur={handleBlur}
-      onKeyDown={keyDownHandler}
-      className="editable_block"
-    />
+    <>
+      <ContentEditable
+        innerRef={editableRef}
+        html={htmlRef.current}
+        tagName={tag}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        onKeyDown={keyDownHandler}
+        className="editable_block"
+      />
+    </>
   );
 }
