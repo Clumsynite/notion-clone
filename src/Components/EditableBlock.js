@@ -7,7 +7,6 @@ export default function EditableBlock({ block, updateBlock, setIsNewBlock, setTo
 
   const [html, setHtml] = useState(block.html);
   const [tag, setTag] = useState(block.tag);
-  const [previousKey, setPreviousKey] = useState(null);
   const [htmlBackup, setHtmlBackup] = useState(block.html);
 
   const handleChange = (evt) => {
@@ -30,7 +29,7 @@ export default function EditableBlock({ block, updateBlock, setIsNewBlock, setTo
     if (evt.keyCode === 191) {
       setHtmlBackup(html);
     }
-    if (previousKey !== 16 && evt.keyCode === 13) {
+    if (!evt.shiftKey && evt.keyCode === 13) {
       evt.preventDefault();
       setIsNewBlock({ ...block, ref: editableRef.current });
     }
@@ -38,7 +37,6 @@ export default function EditableBlock({ block, updateBlock, setIsNewBlock, setTo
       evt.preventDefault();
       setToRemoveBlock({ ...block, ref: editableRef.current });
     }
-    setPreviousKey(evt.keyCode);
   };
 
   return (
