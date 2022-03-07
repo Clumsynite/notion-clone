@@ -10,10 +10,6 @@ export default function EditableBlock({ block, updateBlock, setIsNewBlock, setTo
   const [previousKey, setPreviousKey] = useState(null);
   const [htmlBackup, setHtmlBackup] = useState(block.html);
 
-  useEffect(() => {
-    // htmlRef.current = block.html;
-  }, []);
-
   const handleChange = (evt) => {
     htmlRef.current = evt.target.value;
   };

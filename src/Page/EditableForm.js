@@ -40,7 +40,18 @@ export default function EditableForm() {
       updatedBlocks.splice(relatedBlockIndex, 1);
       setBlocks([...updatedBlocks]);
       previousBlock.focus();
+      setCaretToEnd(previousBlock);
     }
+  };
+
+  const setCaretToEnd = (element) => {
+    const range = document.createRange();
+    const selection = window.getSelection();
+    range.selectNodeContents(element);
+    range.collapse(false);
+    selection.removeAllRanges();
+    selection.addRange(range);
+    element.focus();
   };
 
   useEffect(() => {
