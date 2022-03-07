@@ -1,4 +1,8 @@
-# Getting Started with Create React App
+# notion-clone
+
+## Introduction
+
+This project was made with help and reference from this article `https://medium.com/swlh/how-to-build-a-text-editor-like-notion-c510aedfdfcc`
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
