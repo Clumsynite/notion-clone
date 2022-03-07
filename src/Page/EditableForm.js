@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import EditableBlock from "../Components/EditableBlock";
 import { v4 } from "uuid";
 import _ from "lodash";
+import { setCaretToEnd } from "../helper";
 
 export default function EditableForm() {
   const getnewBlock = (value) => ({
@@ -44,16 +45,6 @@ export default function EditableForm() {
     }
   };
 
-  const setCaretToEnd = (element) => {
-    const range = document.createRange();
-    const selection = window.getSelection();
-    range.selectNodeContents(element);
-    range.collapse(false);
-    selection.removeAllRanges();
-    selection.addRange(range);
-    element.focus();
-  };
-
   useEffect(() => {
     if (isNewBlock) {
       addNewBlock(isNewBlock);
@@ -69,7 +60,7 @@ export default function EditableForm() {
   }, [toRemoveBlock]);
 
   useEffect(() => {
-    if (changeFocus) {
+    if (changeFocus && changeFocus?.nextElementSibling) {
       changeFocus?.nextElementSibling.focus();
       setChangeFocus(false);
     }
