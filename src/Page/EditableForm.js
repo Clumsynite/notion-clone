@@ -9,6 +9,7 @@ export default function EditableForm() {
     id: v4(),
     tag: "p",
     html: value || "",
+    label: "Label: ",
   });
 
   const [blocks, setBlocks] = useState([getnewBlock("Type something to start building your form.")]);
@@ -29,7 +30,7 @@ export default function EditableForm() {
     const newBlock = getnewBlock();
     updatedBlocks.splice(relatedBlockIndex + 1, 0, newBlock);
     setBlocks([...updatedBlocks]);
-    setChangeFocus(currentBlock.ref);
+    if (currentBlock.tag === "p") setChangeFocus(currentBlock.ref);
   };
 
   const deleteBlock = (currentBlock) => {

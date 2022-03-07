@@ -15,8 +15,15 @@ body {
 .title {
   padding-bottom: 10px;
 }
+
 .editable_block {
   background-color: #f8f8f8;
   padding: 10px;
   margin: 2px 0px;
+}
+
+.flex_row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
