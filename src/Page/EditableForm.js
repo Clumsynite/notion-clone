@@ -77,8 +77,42 @@ export default function EditableForm() {
     console.log("SUBMIT");
   };
 
+  const onImport = () => {};
+  const onExport = () => {
+    const element = document.createElement("a");
+    // download json to device
+    let cloneDeep = _.cloneDeep(blocks);
+    cloneDeep = cloneDeep.map((block) => {
+      if (block.tag === "p" || block.tag === "h1") block = _.omit(block, ["options", "label"]);
+      if (block.tag === "input") block = _.omit(block, ["label"]);
+      if (block.tag === "option") block = _.omit(block, ["html"]);
+      return block;
+    });
+    element.setAttribute(
+      "href",
+      "data:text/plain;charset=utf-8," + encodeURIComponent(JSON.stringify(cloneDeep, null, 2))
+    );
+    element.setAttribute("download", "notion-clone-export.json");
+    element.style.display = "none";
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+  };
+
   return (
     <div>
+      <div className="flex_row" style={{ justifyContent: "space-between" }}>
+        <h1 className="title">Notion Clone</h1>
+        <div>
+          <button onClick={onImport} type="button" className="btn btn-outline-secondary">
+            Import
+          </button>
+          <button onClick={onExport} type="button" className="btn btn-outline-dark" style={{ marginLeft: 20 }}>
+            Export
+          </button>
+        </div>
+      </div>
+
       {blocks.map((block) => (
         <EditableBlock
           key={block.id}
