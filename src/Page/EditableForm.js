@@ -73,6 +73,10 @@ export default function EditableForm() {
     addNewBlock(_.last(blocks));
   };
 
+  const onSubmit = () => {
+    console.log("SUBMIT");
+  };
+
   return (
     <div>
       {blocks.map((block) => (
@@ -85,8 +89,12 @@ export default function EditableForm() {
         />
       ))}
       <div style={{ padding: "12px 0" }} className="flex_row">
-        <button onClick={manuallyAddBlock}>Add Field</button>
-        <button style={{ marginLeft: 20 }}>Submit</button>
+        <button type="button" className="btn btn-primary" onClick={manuallyAddBlock}>
+          Add
+        </button>
+        <button type="button" className="btn btn-dark" style={{ marginLeft: 20 }} onClick={onSubmit}>
+          Submit
+        </button>
       </div>
     </div>
   );
