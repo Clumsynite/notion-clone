@@ -10,6 +10,7 @@ export default function EditableForm() {
     tag: "p",
     html: value || "",
     label: "Label: ",
+    options: ["Option 1", "Option 2", "Option 3"],
   });
 
   const [blocks, setBlocks] = useState([getnewBlock("Type something to start building your form.")]);

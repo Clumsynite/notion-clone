@@ -16,14 +16,30 @@ body {
   padding-bottom: 10px;
 }
 
+.flex_row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.flex_column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .editable_block {
   background-color: #f8f8f8;
   padding: 10px;
   margin: 2px 0px;
 }
 
-.flex_row {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+.editable_options {
+  padding: 4px 8px;
+  font-size: 16;
+}
+
+.editable_label {
+  background-color: #f9f9f9;
+  padding-right: 4px;
 }

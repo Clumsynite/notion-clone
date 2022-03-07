@@ -4,6 +4,7 @@ import _ from "lodash";
 
 import { getCaretCoordinates, setCaretToEnd } from "../helper";
 import SelectMenu from "./SelectMenu";
+import EditableOption from "./EditableOption";
 
 export default function EditableBlock({ block, updateBlock, setIsNewBlock, setToRemoveBlock }) {
   const editableRef = useRef();
@@ -18,6 +19,7 @@ export default function EditableBlock({ block, updateBlock, setIsNewBlock, setTo
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [menuPosition, setMenuPosition] = useState({ x: null, y: null });
   const [justClosedMenu, setJustClosedMenu] = useState(false);
+  const [options, setOptions] = useState(block.options);
 
   const onHtmlChange = (e) => {
     htmlRef.current = e.target.value;
@@ -43,7 +45,8 @@ export default function EditableBlock({ block, updateBlock, setIsNewBlock, setTo
   useEffect(() => {
     let htmlChanged = htmlRef.current !== html;
     let tagChanged = tag !== tag;
-    if (htmlChanged || tagChanged) {
+    let labelChanged = labelRef.current !== label;
+    if (htmlChanged || tagChanged || labelChanged) {
       updateBlock({
         ...block,
         tag,
@@ -52,7 +55,7 @@ export default function EditableBlock({ block, updateBlock, setIsNewBlock, setTo
         label: labelRef.current,
       });
     }
-  }, [html]);
+  }, [html, label]);
 
   const keyDownHandler = (e) => {
     if (e.keyCode === 191) {
@@ -108,6 +111,19 @@ export default function EditableBlock({ block, updateBlock, setIsNewBlock, setTo
     }
   }, [tag]);
 
+  const onOptionChange = (option, index) => {
+    setOptions(options.map((opt, i) => (i === index ? option : opt)));
+  };
+
+  useEffect(() => {
+    if (options.length > 0) {
+      let hasChanged = _.isEqual(options, block.options);
+      if (!hasChanged) {
+        updateBlock({ ...block, options, ref: editableRef.current });
+      }
+    }
+  }, [options]);
+
   return (
     <>
       {isMenuOpen && <SelectMenu position={menuPosition} onSelect={onTagChange} close={onCloseMenu} />}
@@ -119,7 +135,7 @@ export default function EditableBlock({ block, updateBlock, setIsNewBlock, setTo
             tagName="p"
             onChange={onLabelChange}
             onBlur={onLabelBlur}
-            className="editable_block"
+            className="editable_label"
           />
           <input
             ref={inputRef}
@@ -127,7 +143,26 @@ export default function EditableBlock({ block, updateBlock, setIsNewBlock, setTo
             onChange={onInputChange}
             type="text"
             className="editable_block"
+            style={{ width: "100%" }}
           />
+        </div>
+      ) : tag === "option" ? (
+        <div className={["flex_row", "editable_block"].join(" ")}>
+          <div>
+            <ContentEditable
+              innerRef={editableRef}
+              html={labelRef.current}
+              tagName="p"
+              onChange={onLabelChange}
+              onBlur={onLabelBlur}
+              className="editable_label"
+            />
+          </div>
+          <div className="flex_column">
+            {block.options.map((option, index) => (
+              <EditableOption key={index} option={option} onOptionChange={onOptionChange} index={index} />
+            ))}
+          </div>
         </div>
       ) : (
         <ContentEditable
