@@ -25,7 +25,7 @@ export default function EditableForm() {
   const addNewBlock = (currentBlock) => {
     let updatedBlocks = [...blocks];
     let relatedBlockIndex = _.findIndex(updatedBlocks, { id: currentBlock.id, html: currentBlock.html });
-    const newBlock = getnewBlock((relatedBlockIndex + 1).toString());
+    const newBlock = getnewBlock();
     updatedBlocks.splice(relatedBlockIndex + 1, 0, newBlock);
     setBlocks([...updatedBlocks]);
     setChangeFocus(currentBlock.ref);
