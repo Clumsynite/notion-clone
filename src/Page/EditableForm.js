@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import EditableBlock from "../Components/EditableBlock";
 import { v4 } from "uuid";
 import _ from "lodash";
+
+import EditableBlock from "../Components/EditableBlock";
 import { setCaretToEnd } from "../helper";
 
 export default function EditableForm() {
@@ -68,6 +69,10 @@ export default function EditableForm() {
     }
   }, [changeFocus]);
 
+  const manuallyAddBlock = () => {
+    addNewBlock(_.last(blocks));
+  };
+
   return (
     <div>
       {blocks.map((block) => (
@@ -79,6 +84,10 @@ export default function EditableForm() {
           setToRemoveBlock={setToRemoveBlock}
         />
       ))}
+      <div style={{ padding: "12px 0" }} className="flex_row">
+        <button onClick={manuallyAddBlock}>Add Field</button>
+        <button style={{ marginLeft: 20 }}>Submit</button>
+      </div>
     </div>
   );
 }
