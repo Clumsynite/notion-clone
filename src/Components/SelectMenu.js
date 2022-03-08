@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { matchSorter } from "match-sorter";
 
-import "./SelectMenu.css";
+import "../styles/SelectMenu.css";
 
 const MENU_HEIGHT = 40;
 

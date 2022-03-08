@@ -6,7 +6,7 @@ import { Draggable } from "react-beautiful-dnd";
 import { getCaretCoordinates, setCaretToEnd } from "../helper";
 import SelectMenu from "./SelectMenu";
 import EditableOption from "./EditableOption";
-import "./EditableBlock.css";
+import "../styles/EditableBlock.css";
 
 export default function EditableBlock({ block, updateBlock, setIsNewBlock, setToRemoveBlock, ...props }) {
   const editableRef = useRef();
