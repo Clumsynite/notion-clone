@@ -18,7 +18,7 @@ export default function EditableBlock({ block, updateBlock, setIsNewBlock, setTo
   const [htmlBackup, setHtmlBackup] = useState(block.html);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [menuPosition, setMenuPosition] = useState({ x: null, y: null });
-  const [justClosedMenu, setJustClosedMenu] = useState(false);
+  const [justClosedMenu, setJustClosedMenu] = useState(0); // 0 - opened, 1 - just closed, 2 - closed
   const [options, setOptions] = useState(block.options);
 
   const onHtmlChange = (e) => {
@@ -62,7 +62,7 @@ export default function EditableBlock({ block, updateBlock, setIsNewBlock, setTo
       setHtmlBackup(html);
       setIsMenuOpen(true);
     }
-    if (!e.shiftKey && e.keyCode === 13 && !justClosedMenu) {
+    if (!e.shiftKey && e.keyCode === 13 && justClosedMenu === 1) {
       e.preventDefault();
       setIsNewBlock({ ...block, ref: editableRef.current });
     }
@@ -87,7 +87,7 @@ export default function EditableBlock({ block, updateBlock, setIsNewBlock, setTo
     const { x, y } = getCaretCoordinates();
     setIsMenuOpen(true);
     setMenuPosition({ x, y });
-    setJustClosedMenu(true);
+    setJustClosedMenu(0);
     document.addEventListener("click", onCloseMenu);
   };
 
@@ -100,7 +100,7 @@ export default function EditableBlock({ block, updateBlock, setIsNewBlock, setTo
   };
 
   useEffect(() => {
-    if (justClosedMenu) setJustClosedMenu(false);
+    if (justClosedMenu === 1) setJustClosedMenu(2);
   }, [justClosedMenu]);
 
   useEffect(() => {
