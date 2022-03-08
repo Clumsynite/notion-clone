@@ -55,7 +55,7 @@ export default function EditableBlock({ block, updateBlock, setIsNewBlock, setTo
         label: labelRef.current,
       });
     }
-  }, [html, label]);
+  }, [html, label, tag]);
 
   const keyDownHandler = (e) => {
     if (e.keyCode === 191) {
@@ -64,7 +64,7 @@ export default function EditableBlock({ block, updateBlock, setIsNewBlock, setTo
     }
     if (!e.shiftKey && e.keyCode === 13 && justClosedMenu === 1) {
       e.preventDefault();
-      setIsNewBlock({ ...block, ref: editableRef.current });
+      setIsNewBlock({ ...block, html: html.current, label: label.current, options, tag, ref: editableRef.current });
     }
     if (e.keyCode === 8 && !htmlRef.current) {
       e.preventDefault();
