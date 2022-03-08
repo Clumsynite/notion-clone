@@ -4,6 +4,8 @@ import _ from "lodash";
 
 import EditableBlock from "../Components/EditableBlock";
 import { isBlockValid, removeUnusedProperties, setCaretToEnd } from "../helper";
+import { DragDropContext } from "react-beautiful-dnd";
+import { Droppable } from "react-beautiful-dnd";
 
 export default function EditableForm() {
   const getnewBlock = (value) => ({
@@ -127,6 +129,22 @@ export default function EditableForm() {
     document.body.removeChild(element);
   };
 
+  const onDragEndHandler = (result) => {
+    const { destination, source } = result;
+
+    // If we don't have a destination (due to dropping outside the droppable)
+    // or the destination hasn't changed, we change nothing
+    if (!destination || destination.index === source.index) {
+      return;
+    }
+
+    console.log({ destination, source });
+    const updatedBlocks = [...blocks];
+    const removedBlocks = updatedBlocks.splice(source.index - 1, 1);
+    updatedBlocks.splice(destination.index - 1, 0, removedBlocks[0]);
+    setBlocks([...updatedBlocks]);
+  };
+
   return (
     <div>
       <div className="flex_row" style={{ justifyContent: "space-between" }}>
@@ -161,15 +179,28 @@ export default function EditableForm() {
       </div>
       <div style={{ minHeight: 14 }}>{error && <div style={{ color: "red", fontSize: "12px" }}>{error}</div>}</div>
 
-      {blocks.map((block) => (
-        <EditableBlock
-          key={block.id}
-          block={block}
-          updateBlock={updateBlock}
-          setIsNewBlock={setIsNewBlock}
-          setToRemoveBlock={setToRemoveBlock}
-        />
-      ))}
+      <DragDropContext onDragEnd={onDragEndHandler}>
+        <Droppable droppableId="blocks">
+          {(provided) => (
+            <div ref={provided.innerRef} {...provided.droppableProps}>
+              {blocks.map((block, position) => {
+                return (
+                  <EditableBlock
+                    key={block.id}
+                    block={block}
+                    updateBlock={updateBlock}
+                    setIsNewBlock={setIsNewBlock}
+                    setToRemoveBlock={setToRemoveBlock}
+                    position={position + 1}
+                    id={"blocks"}
+                  />
+                );
+              })}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      </DragDropContext>
       <div style={{ padding: "12px 0" }} className="flex_row">
         <button type="button" className="btn btn-primary" onClick={manuallyAddBlock}>
           Add

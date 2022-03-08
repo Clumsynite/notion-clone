@@ -1,12 +1,14 @@
 import React, { useState, useRef, useEffect } from "react";
 import ContentEditable from "react-contenteditable";
 import _ from "lodash";
+import { Draggable } from "react-beautiful-dnd";
 
 import { getCaretCoordinates, setCaretToEnd } from "../helper";
 import SelectMenu from "./SelectMenu";
 import EditableOption from "./EditableOption";
+import "./EditableBlock.css";
 
-export default function EditableBlock({ block, updateBlock, setIsNewBlock, setToRemoveBlock }) {
+export default function EditableBlock({ block, updateBlock, setIsNewBlock, setToRemoveBlock, ...props }) {
   const editableRef = useRef();
   const htmlRef = useRef(block.html);
   const labelRef = useRef(block.label);
@@ -18,7 +20,7 @@ export default function EditableBlock({ block, updateBlock, setIsNewBlock, setTo
   const [htmlBackup, setHtmlBackup] = useState(block.html);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [menuPosition, setMenuPosition] = useState({ x: null, y: null });
-  const [justClosedMenu, setJustClosedMenu] = useState(0); // 0 - opened, 1 - just closed, 2 - closed
+  const [justClosedMenu, setJustClosedMenu] = useState(1); // 0 - opened, 1 - just closed, 2 - closed
   const [options, setOptions] = useState(block.options);
 
   const onHtmlChange = (e) => {
@@ -127,55 +129,71 @@ export default function EditableBlock({ block, updateBlock, setIsNewBlock, setTo
   return (
     <>
       {isMenuOpen && <SelectMenu position={menuPosition} onSelect={onTagChange} close={onCloseMenu} />}
-      {tag === "input" ? (
-        <div className="flex_row">
-          <ContentEditable
-            innerRef={editableRef}
-            html={labelRef.current}
-            tagName="p"
-            onChange={onLabelChange}
-            onBlur={onLabelBlur}
-            className="editable_label"
-          />
-          <input
-            ref={inputRef}
-            value={htmlRef.current}
-            onChange={onInputChange}
-            type="text"
-            className="editable_block"
-            style={{ width: "100%" }}
-          />
-        </div>
-      ) : tag === "option" ? (
-        <div className={["flex_row", "editable_block"].join(" ")}>
-          <div>
-            <ContentEditable
-              innerRef={editableRef}
-              html={labelRef.current}
-              tagName="p"
-              onChange={onLabelChange}
-              onBlur={onLabelBlur}
-              className="editable_label"
-            />
+      <Draggable draggableId={block.id} index={props.position}>
+        {(provided /* use "snapshot" variable later to change style while dragging */) => (
+          <div ref={provided.innerRef} className={["draggable", "flex_row"].join(" ")} {...provided.draggableProps}>
+            <div style={{ flex: 9 }}>
+              {tag === "input" ? (
+                <div className="flex_row">
+                  <ContentEditable
+                    innerRef={editableRef}
+                    html={labelRef.current}
+                    tagName="p"
+                    onChange={onLabelChange}
+                    onBlur={onLabelBlur}
+                    className="editable_label"
+                  />
+                  <input
+                    ref={inputRef}
+                    value={htmlRef.current}
+                    onChange={onInputChange}
+                    type="text"
+                    className="editable_block"
+                    style={{ width: "100%" }}
+                  />
+                </div>
+              ) : tag === "option" ? (
+                <div className={["flex_row", "editable_block"].join(" ")}>
+                  <div>
+                    <ContentEditable
+                      innerRef={editableRef}
+                      html={labelRef.current}
+                      tagName="p"
+                      onChange={onLabelChange}
+                      onBlur={onLabelBlur}
+                      className="editable_label"
+                    />
+                  </div>
+                  <div className="flex_column">
+                    {block.options.map((option, index) => (
+                      <EditableOption key={index} option={option} onOptionChange={onOptionChange} index={index} />
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <ContentEditable
+                  innerRef={editableRef}
+                  html={htmlRef.current}
+                  tagName={tag}
+                  onChange={onHtmlChange}
+                  onBlur={onHtmlBlur}
+                  onKeyDown={keyDownHandler}
+                  onKeyUp={onKeyUpHandler}
+                  className="editable_block"
+                />
+              )}
+            </div>
+            <div
+              style={{ flex: 1, cursor: "pointer" }}
+              className="dragHandle"
+              {...provided.dragHandleProps}
+              tabIndex={-1}
+            >
+              <span className="iconify-inline" data-icon="bi:grip-vertical" data-width="20" data-height="20"></span>
+            </div>
           </div>
-          <div className="flex_column">
-            {block.options.map((option, index) => (
-              <EditableOption key={index} option={option} onOptionChange={onOptionChange} index={index} />
-            ))}
-          </div>
-        </div>
-      ) : (
-        <ContentEditable
-          innerRef={editableRef}
-          html={htmlRef.current}
-          tagName={tag}
-          onChange={onHtmlChange}
-          onBlur={onHtmlBlur}
-          onKeyDown={keyDownHandler}
-          onKeyUp={onKeyUpHandler}
-          className="editable_block"
-        />
-      )}
+        )}
+      </Draggable>
     </>
   );
 }

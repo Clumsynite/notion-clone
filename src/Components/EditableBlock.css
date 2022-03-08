@@ -1,0 +1,17 @@
+.draggable .block {
+  display: inline-block;
+  width: calc(100% - 1rem);
+}
+
+.draggable:hover .block {
+  background: #fafafa;
+  outline-color: #f5f6fb;
+}
+.draggable:hover .dragHandle {
+  opacity: 1;
+}
+.dragHandle {
+  opacity: 0;
+  display: inline-block;
+  width: 1rem;
+}

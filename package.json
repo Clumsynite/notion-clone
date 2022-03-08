@@ -7,6 +7,7 @@
     "match-sorter": "^6.3.1",
     "moment": "^2.29.1",
     "react": "^17.0.2",
+    "react-beautiful-dnd": "^13.1.0",
     "react-contenteditable": "^3.3.6",
     "react-dom": "^17.0.2",
     "react-scripts": "5.0.0",
