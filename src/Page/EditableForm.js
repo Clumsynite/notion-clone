@@ -34,6 +34,7 @@ export default function EditableForm() {
     let updatedBlocks = [...blocks];
     let relatedBlockIndex = _.findIndex(updatedBlocks, { id: currentBlock.id });
     updatedBlocks[relatedBlockIndex] = JSON.parse(JSON.stringify({ ...currentBlock, ref: undefined }));
+    console.log(JSON.parse(JSON.stringify({ ...currentBlock, ref: undefined })));
     const newBlock = getnewBlock();
     updatedBlocks.splice(relatedBlockIndex + 1, 0, newBlock);
     setBlocks([...updatedBlocks]);
