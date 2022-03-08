@@ -4,6 +4,26 @@
 
 This project was made with help and reference from this article `https://medium.com/swlh/how-to-build-a-text-editor-like-notion-c510aedfdfcc`
 
+### Notion CLone covers the following functions
+
+#### Level 1
+
+It must be possible to type /{command} into the editor field, while command is one of the given functions:
+
+- `/headline`: inserts and renders a html `<h1>` headline into the editor window.
+- `/textinput`: inserts and renders a html `<input>` field into the editors window
+- `/option`: inserts and renders a html `<option>` field with 3 possible options.
+  > `for options field, I've used editable divs again, but it works with options too and the change won't take much time`
+
+#### Level 2:
+
+- a functionality to import and export the created form in json format.
+
+#### Level 3:
+
+- individual form components drag and drop-able, so they can be reordered
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
