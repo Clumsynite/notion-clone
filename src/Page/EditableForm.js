@@ -21,14 +21,15 @@ export default function EditableForm() {
 
   const updateBlock = (currentBlock) => {
     let updatedBlocks = [...blocks];
-    let relatedBlockIndex = _.findIndex(updatedBlocks, { id: currentBlock.id, html: currentBlock.html });
-    updatedBlocks[relatedBlockIndex] = currentBlock;
+    let relatedBlockIndex = _.findIndex(updatedBlocks, { id: currentBlock.id });
+    updatedBlocks[relatedBlockIndex] = JSON.parse(JSON.stringify({ ...currentBlock, ref: undefined }));
     setBlocks([...updatedBlocks]);
   };
 
   const addNewBlock = (currentBlock) => {
     let updatedBlocks = [...blocks];
-    let relatedBlockIndex = _.findIndex(updatedBlocks, { id: currentBlock.id, html: currentBlock.html });
+    let relatedBlockIndex = _.findIndex(updatedBlocks, { id: currentBlock.id });
+    updatedBlocks[relatedBlockIndex] = JSON.parse(JSON.stringify({ ...currentBlock, ref: undefined }));
     const newBlock = getnewBlock();
     updatedBlocks.splice(relatedBlockIndex + 1, 0, newBlock);
     setBlocks([...updatedBlocks]);
@@ -40,7 +41,7 @@ export default function EditableForm() {
     if (previousBlock) {
       console.log(blocks.length);
       let updatedBlocks = [...blocks];
-      let relatedBlockIndex = _.findIndex(updatedBlocks, { id: currentBlock.id, html: currentBlock.html });
+      let relatedBlockIndex = _.findIndex(updatedBlocks, { id: currentBlock.id });
       updatedBlocks.splice(relatedBlockIndex, 1);
       setBlocks([...updatedBlocks]);
       previousBlock.focus();
@@ -84,7 +85,7 @@ export default function EditableForm() {
     let cloneDeep = _.cloneDeep(blocks);
     cloneDeep = cloneDeep.map((block) => {
       if (block.tag === "p" || block.tag === "h1") block = _.omit(block, ["options", "label"]);
-      if (block.tag === "input") block = _.omit(block, ["label"]);
+      if (block.tag === "input") block = _.omit(block, ["label", "options"]);
       if (block.tag === "option") block = _.omit(block, ["html"]);
       return block;
     });
