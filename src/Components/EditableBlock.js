@@ -55,7 +55,7 @@ export default function EditableBlock({ block, updateBlock, setIsNewBlock, setTo
         label: labelRef.current,
       });
     }
-  }, [html, label, tag]);
+  }, [html, label, tag, labelRef.current, htmlRef.current]);
 
   const keyDownHandler = (e) => {
     if (e.keyCode === 191) {
@@ -116,7 +116,7 @@ export default function EditableBlock({ block, updateBlock, setIsNewBlock, setTo
   };
 
   useEffect(() => {
-    if (options.length > 0) {
+    if (options && options.length > 0) {
       let hasChanged = _.isEqual(options, block.options);
       if (!hasChanged) {
         updateBlock({ ...block, options, ref: editableRef.current });

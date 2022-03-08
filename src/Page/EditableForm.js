@@ -3,7 +3,7 @@ import { v4 } from "uuid";
 import _ from "lodash";
 
 import EditableBlock from "../Components/EditableBlock";
-import { setCaretToEnd } from "../helper";
+import { isBlockValid, removeUnusedProperties, setCaretToEnd } from "../helper";
 
 export default function EditableForm() {
   const getnewBlock = (value) => ({
@@ -18,6 +18,8 @@ export default function EditableForm() {
   const [isNewBlock, setIsNewBlock] = useState(null);
   const [toRemoveBlock, setToRemoveBlock] = useState(null);
   const [changeFocus, setChangeFocus] = useState(null);
+  const [selectedJSON, setSelectedJSON] = useState(null);
+  const [error, setError] = useState(null);
 
   const updateBlock = (currentBlock) => {
     let updatedBlocks = [...blocks];
@@ -70,6 +72,38 @@ export default function EditableForm() {
     }
   }, [changeFocus]);
 
+  useEffect(() => {
+    if (selectedJSON) {
+      let parsedJSON;
+      let reader = new FileReader();
+      reader.onload = (e) => {
+        parsedJSON = JSON.parse(e.target.result);
+
+        if (parsedJSON) {
+          try {
+            for (let block of parsedJSON) {
+              isBlockValid(block);
+            }
+            setBlocks(parsedJSON);
+          } catch (error) {
+            console.error(error);
+            setError(_.isObject(error) ? "An Error Ocurred" : error);
+          }
+        }
+      };
+      reader.readAsText(selectedJSON);
+      setSelectedJSON(false);
+    }
+  }, [selectedJSON]);
+
+  useEffect(() => {
+    let timeout;
+    timeout = setTimeout(() => {
+      setError(false);
+    }, 3000);
+    return () => clearTimeout(timeout);
+  }, [error]);
+
   const manuallyAddBlock = () => {
     addNewBlock(_.last(blocks));
   };
@@ -78,20 +112,13 @@ export default function EditableForm() {
     console.log("SUBMIT");
   };
 
-  const onImport = () => {};
   const onExport = () => {
     const element = document.createElement("a");
     // download json to device
-    let cloneDeep = _.cloneDeep(blocks);
-    cloneDeep = cloneDeep.map((block) => {
-      if (block.tag === "p" || block.tag === "h1") block = _.omit(block, ["options", "label"]);
-      if (block.tag === "input") block = _.omit(block, ["label", "options"]);
-      if (block.tag === "option") block = _.omit(block, ["html"]);
-      return block;
-    });
+    const cleanJson = removeUnusedProperties(blocks);
     element.setAttribute(
       "href",
-      "data:text/plain;charset=utf-8," + encodeURIComponent(JSON.stringify(cloneDeep, null, 2))
+      "data:text/plain;charset=utf-8," + encodeURIComponent(JSON.stringify(cleanJson, null, 2))
     );
     element.setAttribute("download", "notion-clone-export.json");
     element.style.display = "none";
@@ -105,14 +132,34 @@ export default function EditableForm() {
       <div className="flex_row" style={{ justifyContent: "space-between" }}>
         <h1 className="title">Notion Clone</h1>
         <div>
-          <button onClick={onImport} type="button" className="btn btn-outline-secondary">
+          <input
+            type="file"
+            id="file"
+            accept="application/json" // only allow json files
+            onChange={(e) => setSelectedJSON(e.target.files[0] || null)}
+            style={{ display: "none" }}
+          />
+          <label
+            htmlFor="file"
+            style={{
+              backgroundColor: "#fff",
+              color: "#000",
+              padding: 6,
+              fontSize: 16,
+              border: "1px solid #000",
+              borderRadius: 4,
+              cursor: "pointer",
+              fontWeight: "normal",
+            }}
+          >
             Import
-          </button>
+          </label>
           <button onClick={onExport} type="button" className="btn btn-outline-dark" style={{ marginLeft: 20 }}>
             Export
           </button>
         </div>
       </div>
+      <div style={{ minHeight: 14 }}>{error && <div style={{ color: "red", fontSize: "12px" }}>{error}</div>}</div>
 
       {blocks.map((block) => (
         <EditableBlock
