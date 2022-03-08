@@ -59,6 +59,7 @@ export default function EditableForm() {
       addNewBlock(isNewBlock);
       setIsNewBlock(false);
     }
+    // eslint-disable-next-line
   }, [isNewBlock]);
 
   useEffect(() => {
@@ -66,6 +67,7 @@ export default function EditableForm() {
       deleteBlock(toRemoveBlock);
       setToRemoveBlock(false);
     }
+    // eslint-disable-next-line
   }, [toRemoveBlock]);
 
   useEffect(() => {

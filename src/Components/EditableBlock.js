@@ -46,7 +46,7 @@ export default function EditableBlock({ block, updateBlock, setIsNewBlock, setTo
 
   useEffect(() => {
     let htmlChanged = htmlRef.current !== html;
-    let tagChanged = tag !== tag;
+    let tagChanged = tag !== block.tag;
     let labelChanged = labelRef.current !== label;
     if (htmlChanged || tagChanged || labelChanged) {
       updateBlock({
@@ -57,7 +57,8 @@ export default function EditableBlock({ block, updateBlock, setIsNewBlock, setTo
         label: labelRef.current,
       });
     }
-  }, [html, label, tag, labelRef.current, htmlRef.current]);
+    // eslint-disable-next-line
+  }, [html, label, tag, labelRef, htmlRef]);
 
   const keyDownHandler = (e) => {
     if (e.keyCode === 191) {
@@ -118,6 +119,7 @@ export default function EditableBlock({ block, updateBlock, setIsNewBlock, setTo
       if (tag === "p") setCaretToEnd(editableRef.current);
       onCloseMenu();
     }
+    // eslint-disable-next-line
   }, [tag]);
 
   const onOptionChange = (option, index) => {
@@ -131,6 +133,7 @@ export default function EditableBlock({ block, updateBlock, setIsNewBlock, setTo
         updateBlock({ ...block, options, ref: editableRef.current });
       }
     }
+    // eslint-disable-next-line
   }, [options]);
 
   return (

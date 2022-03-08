@@ -67,6 +67,7 @@ const SelectMenu = ({ position, onSelect, close }) => {
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
+    // eslint-disable-next-line
   }, [items, selected]);
 
   return (
