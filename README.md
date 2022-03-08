@@ -2,13 +2,13 @@
 
 ## Introduction
 
-This project was made with help and reference from this article `https://medium.com/swlh/how-to-build-a-text-editor-like-notion-c510aedfdfcc`
+This project was made with help and reference from [this article](https://medium.com/swlh/how-to-build-a-text-editor-like-notion-c510aedfdfcc)
 
-### Notion CLone covers the following functions
+### Notion Clone covers the following functions
 
 #### Level 1
 
-It must be possible to type /{command} into the editor field, while command is one of the given functions:
+It must be possible to type `/{command}` into the editor field, while command is one of the given functions:
 
 - `/headline`: inserts and renders a html `<h1>` headline into the editor window.
 - `/textinput`: inserts and renders a html `<input>` field into the editors window
@@ -22,7 +22,6 @@ It must be possible to type /{command} into the editor field, while command is o
 #### Level 3:
 
 - individual form components drag and drop-able, so they can be reordered
-
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
